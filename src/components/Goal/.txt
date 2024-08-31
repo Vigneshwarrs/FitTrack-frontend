@@ -1,0 +1,247 @@
+
+
+
+// import React, { useState } from 'react';
+// import { Formik, Form, Field, ErrorMessage } from 'formik';
+// import * as Yup from 'yup';
+// import api from '../../utils/api';
+// import { TextField, Button, Typography, MenuItem, Select, FormControl, InputLabel, FormHelperText, Box, Container } from '@mui/material';
+
+// // Validation schema for the goal type selection
+// const goalTypeValidationSchema = Yup.object({
+//   type: Yup.string().required('Goal type is required'),
+// });
+
+// // Dynamic validation schema based on goal type
+// const getAdditionalInputsValidationSchema = (goalType) => Yup.object().shape({
+//   target: Yup.number().required('Target value is required').positive('Must be a positive number'),
+//   duration: Yup.string().required('Duration is required'),
+//   weight: Yup.lazy(() => 
+//     goalType === 'weight' ? Yup.number().required('Weight is required').positive('Must be a positive number') : Yup.mixed().notRequired()
+//   ),
+//   reps: Yup.lazy(() => 
+//     goalType === 'strength' ? Yup.number().required('Reps are required').positive('Must be a positive number') : Yup.mixed().notRequired()
+//   ),
+//   sets: Yup.lazy(() => 
+//     goalType === 'strength' ? Yup.number().required('Sets are required').positive('Must be a positive number') : Yup.mixed().notRequired()
+//   ),
+//   distance: Yup.lazy(() => 
+//     goalType === 'cardio' ? Yup.number().required('Distance is required').positive('Must be a positive number') : Yup.mixed().notRequired()
+//   ),
+//   durationType: Yup.lazy(() => 
+//     goalType === 'cardio' ? Yup.string().required('Duration type is required') : Yup.mixed().notRequired()
+//   ),
+// });
+
+// const GoalForm = ({ onSubmitSuccess }) => {
+//   const [step, setStep] = useState(1);
+//   const [goalType, setGoalType] = useState('');
+
+//   const initialValuesStep1 = {
+//     type: '',
+//   };
+
+//   const initialValuesStep2 = {
+//     target: '',
+//     duration: '',
+//     weight: '',
+//     reps: '',
+//     sets: '',
+//     distance: '',
+//     durationType: '',
+//   };
+
+//   const handleStep1Submit = (values) => {
+//     setGoalType(values.type);
+//     setStep(2);
+//   };
+
+//   const handleStep2Submit = async (values, { setSubmitting }) => {
+//     try {
+//       const response = await api.post('/api/goals', values);
+//       console.log(response);
+//       onSubmitSuccess();
+//     } catch (error) {
+//       console.error(error);
+//     }
+//     setSubmitting(false);
+//     setStep(1);
+//   };
+
+//   return (
+//     <Container>
+//       <Typography variant="h4" gutterBottom>
+//         Set a New Goal
+//       </Typography>
+
+//       {/* Step 1: Goal Type Selection */}
+//       {step === 1 && (
+//         <Formik
+//           initialValues={initialValuesStep1}
+//           validationSchema={goalTypeValidationSchema}
+//           onSubmit={handleStep1Submit}
+//         >
+//           {({ isSubmitting }) => (
+//             <Form>
+//               <FormControl fullWidth margin="normal">
+//                 <InputLabel id="goal-type-label">Goal Type</InputLabel>
+//                 <Field
+//                   as={Select}
+//                   name="type"
+//                   labelId="goal-type-label"
+//                   label="Goal Type"
+//                 >
+//                   <MenuItem value="">Select a goal type</MenuItem>
+//                   <MenuItem value="weight">Weight</MenuItem>
+//                   <MenuItem value="strength">Strength</MenuItem>
+//                   <MenuItem value="cardio">Cardio</MenuItem>
+//                   <MenuItem value="flexibility">Flexibility</MenuItem>
+//                   <MenuItem value="endurance">Endurance</MenuItem>
+//                   <MenuItem value="balance">Balance</MenuItem>
+//                   <MenuItem value="mobility">Mobility</MenuItem>
+//                   <MenuItem value="recovery">Recovery</MenuItem>
+//                 </Field>
+//                 <FormHelperText>
+//                   <ErrorMessage name="type" component="p" style={{ color: 'red' }} />
+//                 </FormHelperText>
+//               </FormControl>
+//               <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
+//                 Next
+//               </Button>
+//             </Form>
+//           )}
+//         </Formik>
+//       )}
+
+//       {/* Step 2: Additional Goal Details */}
+//       {step === 2 && (
+//         <Formik
+//           initialValues={{ ...initialValuesStep2, type: goalType }}
+//           validationSchema={getAdditionalInputsValidationSchema(goalType)}
+//           onSubmit={handleStep2Submit}
+//         >
+//           {({ isSubmitting }) => (
+//             <Form>
+//               <Box mb={2}>
+//                 <Field
+//                   name="target"
+//                   label="Target Value"
+//                   type="number"
+//                   variant="outlined"
+//                   fullWidth
+//                   margin="normal"
+//                   as={TextField}
+//                 />
+//                 <ErrorMessage name="target" component="p" style={{ color: 'red' }} />
+//               </Box>
+
+//               {goalType === 'weight' && (
+//                 <>
+//                 <Box mb={2}>
+//                 <Field
+//                   name="target"
+//                   label="Target Weight (e.g., 70kg)"
+//                   type="number"
+//                   variant="outlined"
+//                   fullWidth
+//                   margin="normal"
+//                   as={TextField}
+//                 />
+//                 <ErrorMessage name="target" component="p" style={{ color: 'red' }} />
+//               </Box>
+//                 <Box mb={2}>
+//                   <Field
+//                     name="weight"
+//                     label="Weight (e.g., 90kg)"
+//                     type="number"
+//                     variant="outlined"
+//                     fullWidth
+//                     margin="normal"
+//                     as={TextField}
+//                   />
+//                   <ErrorMessage name="weight" component="p" style={{ color: 'red' }} />
+//                 </Box>
+//                 </>
+//               )}
+
+//               {goalType === 'strength' && (
+//                 <>
+//                   <Box mb={2}>
+//                     <Field
+//                       name="reps"
+//                       label="Reps"
+//                       type="number"
+//                       variant="outlined"
+//                       fullWidth
+//                       margin="normal"
+//                       as={TextField}
+//                     />
+//                     <ErrorMessage name="reps" component="p" style={{ color: 'red' }} />
+//                   </Box>
+//                   <Box mb={2}>
+//                     <Field
+//                       name="sets"
+//                       label="Sets"
+//                       type="number"
+//                       variant="outlined"
+//                       fullWidth
+//                       margin="normal"
+//                       as={TextField}
+//                     />
+//                     <ErrorMessage name="sets" component="p" style={{ color: 'red' }} />
+//                   </Box>
+//                 </>
+//               )}
+
+//               {goalType === 'cardio' && (
+//                 <>
+//                   <Box mb={2}>
+//                     <Field
+//                       name="distance"
+//                       label="Distance (e.g., 5km)"
+//                       type="number"
+//                       variant="outlined"
+//                       fullWidth
+//                       margin="normal"
+//                       as={TextField}
+//                     />
+//                     <ErrorMessage name="distance" component="p" style={{ color: 'red' }} />
+//                   </Box>
+//                   <Box mb={2}>
+//                     <Field
+//                       name="durationType"
+//                       label="Duration Type (e.g., minutes)"
+//                       variant="outlined"
+//                       fullWidth
+//                       margin="normal"
+//                       as={TextField}
+//                     />
+//                     <ErrorMessage name="durationType" component="p" style={{ color: 'red' }} />
+//                   </Box>
+//                 </>
+//               )}
+
+//               <Box mb={2}>
+//                 <Field
+//                   name="duration"
+//                   label="Duration (e.g., 30 days)"
+//                   variant="outlined"
+//                   fullWidth
+//                   margin="normal"
+//                   as={TextField}
+//                 />
+//                 <ErrorMessage name="duration" component="p" style={{ color: 'red' }} />
+//               </Box>
+
+//               <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
+//                 Set Goal
+//               </Button>
+//             </Form>
+//           )}
+//         </Formik>
+//       )}
+//     </Container>
+//   );
+// };
+
+// export default GoalForm;
