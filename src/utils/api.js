@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://fittrack-backend-mu3q.onrender.com/',
+  baseURL: 'https://fittrack-backend-mu3q.onrender.com',
 });
 
 api.interceptors.request.use((config) => {
