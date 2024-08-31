@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../utils/api';
 import { Paper, Typography, CircularProgress, Divider } from '@mui/material';
+import { getWorkouts } from '../../services/workoutService';
 
 const WorkoutList = () => {
   const [workouts, setWorkouts] = useState([]);
@@ -10,7 +10,7 @@ const WorkoutList = () => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const response = await api.get('/api/workouts');
+        const response = await getWorkouts();
         setWorkouts(response.data);
       } catch (error) {
         setError("Error fetching workouts. Please try again later.");

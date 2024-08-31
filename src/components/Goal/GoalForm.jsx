@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import api from "../../utils/api";
 import {
   TextField,
   Button,
@@ -16,6 +15,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import { setGoal } from "../../services/goalService";
 
 // Validation schema for the goal type selection
 const goalTypeValidationSchema = Yup.object({
@@ -26,12 +26,12 @@ const goalTypeValidationSchema = Yup.object({
 const getAdditionalInputsValidationSchema = (goalType) =>
   Yup.object().shape({
     target: Yup.lazy(() =>
-      !["flexibility", "endurance", "strength", "cardio", "hydration", "nutrition"].includes(goalType)
+      !["flexibility", "endurance", "strength", "cardio", "hydration", "nutrition", "recovery"].includes(goalType)
         ? Yup.string().required("Target value is required")
         : Yup.mixed().notRequired()
     ),
     duration: Yup.lazy(() =>
-      ["cardio", "endurance", "recovery", "strength", "hydration"].includes(goalType)
+      ["cardio", "endurance", "recovery", "hydration"].includes(goalType)
         ? Yup.string().required("Duration is required")
         : Yup.mixed().notRequired()
     ),
@@ -151,7 +151,7 @@ const GoalForm = ({ onSubmitSuccess }) => {
         duration: values.type === 'cardio' || values.type === 'endurance' ? `${values.duration} ${values.durationType}` : values.duration,
         distance: values.type === 'cardio' || values.type === 'endurance' ? `${values.distance} ${values.units}` : values.distance,
       };
-      await api.post("/api/goals", updateValues);
+      await setGoal(updateValues);
       setSnackbarMessage("Goal set successfully!");
       setSnackbarSeverity("success");
       if (onSubmitSuccess) onSubmitSuccess();
@@ -321,6 +321,9 @@ const GoalForm = ({ onSubmitSuccess }) => {
                       <MenuItem value="biceps">Biceps</MenuItem>
                       <MenuItem value="triceps">Triceps</MenuItem>
                     </Field>
+                    <ErrorMessage name="muscleGroup" component="p" style={{ color: "red" }} />
+                    </Box>
+                    <Box mb={2}>
                     <Field
                       name="reps"
                       label="Reps"
@@ -331,7 +334,6 @@ const GoalForm = ({ onSubmitSuccess }) => {
                       as={TextField}
                     />
                     <ErrorMessage name="reps" component="p" style={{ color: "red" }} />
-                    <ErrorMessage name="muscleGroup" component="p" style={{ color: "red" }} />
                   </Box>
                   <Box mb={2}>
                     <Field
@@ -400,6 +402,41 @@ const GoalForm = ({ onSubmitSuccess }) => {
                       <MenuItem value="weeks">Weeks</MenuItem>
                     </Field>
                     <ErrorMessage name="durationType" component="p" style={{ color: "red" }} />
+                  </Box>
+                </>
+              )}
+               {goalType === "endurance" && (
+                <>
+                  <Box mb={2}>
+                    <Field
+                      name="distance"
+                      label="Distance (e.g., 10km)"
+                      type="number"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      as={TextField}
+                    />
+                    <ErrorMessage
+                      name="distance"
+                      component="p"
+                      style={{ color: "red" }}
+                    />
+                  </Box>
+                  <Box mb={2}>
+                    <Field
+                      name="duration"
+                      label="Duration (e.g., 30 Minutes)"
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      as={TextField}
+                    />
+                    <ErrorMessage
+                      name="duration"
+                      component="p"
+                      style={{ color: "red" }}
+                    />
                   </Box>
                 </>
               )}

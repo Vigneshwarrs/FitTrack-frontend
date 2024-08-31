@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, List, ListItem, CircularProgress, Paper } from '@mui/material';
-import api from '../utils/api';
+import { getExerciseSuggestions } from '../services/suggestionService';
 
 const ExerciseSuggestions = () => {
   const [exercises, setExercises] = useState([]);
@@ -10,7 +10,7 @@ const ExerciseSuggestions = () => {
   useEffect(() => {
     const fetchExercises = async () => {
       try {
-        const response = await api.get('/api/suggestions/exercises');
+        const response = await getExerciseSuggestions();
         setExercises(response.data);
       } catch (error) {
         setError('Failed to load exercise suggestions');

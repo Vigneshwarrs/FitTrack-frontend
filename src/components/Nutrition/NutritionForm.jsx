@@ -1,9 +1,9 @@
 import React from 'react';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import api from '../../utils/api';
 import { Button, TextField, Typography, IconButton, Paper, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { logNutrition } from '../../services/nutritionService';
 
 const NutritionForm = ({ onSubmitSuccess }) => {
   const initialValues = {
@@ -40,7 +40,7 @@ const NutritionForm = ({ onSubmitSuccess }) => {
 
   const onSubmit = async (values, { setSubmitting }) => {
     try {
-      await api.post('/api/nutrition', values);
+      await logNutrition(values);
       onSubmitSuccess();
     } catch (error) {
       console.error(error);

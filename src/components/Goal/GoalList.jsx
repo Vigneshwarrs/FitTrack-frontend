@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import api from "../../utils/api";
 import {
   Typography,
   List,
@@ -12,6 +11,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { format, addDays } from "date-fns";
+import { getGoals, deleteGoal } from "../../services/goalService";
 
 const GoalList = ({ onGoalUpdated }) => {
   const [goals, setGoals] = useState([]);
@@ -23,7 +23,7 @@ const GoalList = ({ onGoalUpdated }) => {
   useEffect(() => {
     const fetchGoals = async () => {
       try {
-        const response = await api.get("/api/goals");
+        const response = await getGoals();
         setGoals(response.data);
       } catch (error) {
         console.error(error);
@@ -40,7 +40,7 @@ const GoalList = ({ onGoalUpdated }) => {
 
   const handleDeleteGoal = async (goalId) => {
     try {
-      await api.delete(`/api/goals/${goalId}`);
+      await deleteGoal(goalId);
       setSnackbarMessage("Goal deleted successfully!");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../utils/api';
 import { Paper, Box, Typography } from '@mui/material';
+import { getNutritionLogs } from '../../services/nutritionService';
 
 const NutritionList = () => {
   const [nutritionLogs, setNutritionLogs] = useState([]);
@@ -10,7 +10,7 @@ const NutritionList = () => {
   useEffect(() => {
     const fetchNutritionLogs = async () => {
       try {
-        const response = await api.get('/api/nutrition');
+        const response = await getNutritionLogs();
         setNutritionLogs(response.data);
       } catch (error) {
         setError('Failed to fetch nutrition logs.');

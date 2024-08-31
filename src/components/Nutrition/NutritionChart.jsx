@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import api from '../../utils/api';
+import {getNutritionLogs} from '../../services/nutritionService';
 import { Paper, Typography, CircularProgress, Divider } from '@mui/material';
 
 Chart.register(
@@ -39,7 +39,7 @@ const NutritionChart = ({ chartType }) => {
   useEffect(() => {
     const fetchNutritionData = async () => {
       try {
-        const response = await api.get('/api/nutrition');
+        const response = await getNutritionLogs();
         const nutritionLogs = response.data;
 
         if (chartType === 'today') {

@@ -9,8 +9,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import api from "../../utils/api";
 import { Paper, Typography, CircularProgress, Divider } from "@mui/material";
+import { getWorkouts } from "../../services/workoutService";
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -32,7 +32,7 @@ const WorkoutBarChart = ({ chartType }) => {
   useEffect(() => {
     const fetchWorkoutData = async () => {
       try {
-        const response = await api.get("/api/workouts");
+        const response = await getWorkouts();
         const workoutLogs = response.data;
 
         if (chartType === "today") {

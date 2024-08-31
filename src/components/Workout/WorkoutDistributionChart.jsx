@@ -7,7 +7,7 @@ import {
   Legend
 } from 'chart.js';
 import { Paper, Typography, CircularProgress, Box, Divider } from '@mui/material';
-import api from '../../utils/api';
+import { getWorkouts } from '../../services/workoutService';
 
 // Register necessary components for Pie chart
 Chart.register(ArcElement, Tooltip, Legend);
@@ -23,7 +23,7 @@ const WorkoutDistributionChart = () => {
   useEffect(() => {
     const fetchWorkoutDistribution = async () => {
       try {
-        const response = await api.get('/api/workouts');
+        const response = await getWorkouts();
         const workouts = response.data;
 
         // Calculate exercise types and their counts

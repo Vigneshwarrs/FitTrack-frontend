@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { Container, Typography, Grid, Paper, Snackbar } from '@mui/material';
 import WorkoutForm from '../components/Workout/WorkoutForm';
@@ -30,19 +29,21 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
+      const user = localStorage.getItem('user');
       if (!token) {
         navigate('/login');
         console.log('No token found');
         return;
       }
-      try {
-        const response = await api.get('/api/auth/profile');
-        setUser(response.data.user);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
+      // try {
+      //   const response = await api.get('/api/auth/profile');
+      //   setUser(response.data.user);
+      // } catch (error) {
+      //   console.error('Error fetching user:', error);
+      //   localStorage.removeItem('token');
+      //   navigate('/login');
+      // }
+      setUser(JSON.parse(user)  );
     };
     fetchUser();
   }, [navigate]);
@@ -53,6 +54,9 @@ const Dashboard = () => {
         <div>
           <Typography variant="h4" gutterBottom>
             Welcome, {user.name}
+            {
+              console.log(typeof user)
+            }
           </Typography>
           <Typography variant="body1" gutterBottom>
             Email: {user.email}

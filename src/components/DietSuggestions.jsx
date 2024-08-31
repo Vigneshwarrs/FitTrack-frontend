@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, List, ListItem, CircularProgress, Paper } from '@mui/material';
-import api from '../utils/api';
+import { getDietSuggestions } from '../services/suggestionService';
 
 const DietSuggestions = () => {
   const [diet, setDiet] = useState([]);
@@ -10,7 +10,7 @@ const DietSuggestions = () => {
   useEffect(() => {
     const fetchDiet = async () => {
       try {
-        const response = await api.get('/api/suggestions/diet');
+        const response = await getDietSuggestions();
         setDiet(response.data);
       } catch (error) {
         setError('Failed to load diet suggestions');

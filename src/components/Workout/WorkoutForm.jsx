@@ -1,8 +1,8 @@
 import React from 'react';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import api from '../../utils/api';
 import { Button, TextField, MenuItem, Paper, Typography, CircularProgress, Box } from '@mui/material';
+import { logWorkout } from '../../services/workoutService';
 
 const WorkoutForm = ({ onSubmitSuccess }) => {
   const initialValues = {
@@ -29,7 +29,7 @@ const WorkoutForm = ({ onSubmitSuccess }) => {
 
   const onSubmit = async (values, { setSubmitting }) => {
     try {
-      await api.post('/api/workouts', values);
+      await logWorkout(values);
       onSubmitSuccess();
     } catch (error) {
       console.error("Error submitting workout:", error);
