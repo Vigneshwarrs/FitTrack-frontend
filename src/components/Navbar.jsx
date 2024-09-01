@@ -183,7 +183,7 @@ const Navbar = () => {
                 <LogoutIcon />
                   Logout
                 </Button>
-                <Tooltip title={user.name} arrow>
+                {user && <Tooltip title={user.name} arrow>
                   <Avatar
                     sx={{ bgcolor: "blueviolet", marginLeft: 2 }}
                     alt={user.name}
@@ -191,7 +191,7 @@ const Navbar = () => {
                   >
                     {user.name.charAt(0)}
                   </Avatar>
-                </Tooltip>
+                </Tooltip>}
               </>
             )}
           </Box>
