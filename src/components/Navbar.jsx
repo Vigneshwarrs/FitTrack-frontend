@@ -63,7 +63,7 @@ const Navbar = () => {
 
   const drawer = (
     <div>
-      {token ? (
+      {token && user ? (
         <List>
           <ListItem
             button
